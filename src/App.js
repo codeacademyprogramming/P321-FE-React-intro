@@ -1,90 +1,50 @@
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useState } from "react";
+import { Routes, Route, Link } from "react-router-dom";
+
 import "./App.css";
+import { About } from "./pages/About";
+import { Contact } from "./pages/Contact";
+import { Home } from "./pages/Home";
+import { Todo } from "./Todo";
+// import { Todo } from "./Todo";
 
 export const App = () => {
-  const [todos, setTodos] = useState([]);
-  const [todoText, setTodoText] = useState("");
+  // const [isVisible, setIsVisible] = useState(false);
+  const [userName, setUserName] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (todoText) {
-      const newTodoItem = {
-        id: uuidv4().substring(0, 8),
-        text: todoText,
-        isDone: false,
-      };
-      const updatedTodoItems = [...todos, newTodoItem];
-
-      setTodos(updatedTodoItems);
-      setTodoText("");
-    } else {
-      alert("zehmet olmasa bir shey yaz");
-    }
-  };
-
-  const handleChange = (e) => {
-    setTodoText(e.target.value);
-  };
-
-  const handleDelete = (id) => {
-    const filteredTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(filteredTodos);
-  };
-
-  const handleMoveTo = (id) => {
-    const mappedItems = todos.map((item) => {
-      if (item.id === id) {
-        return { ...item, isDone: !item.isDone };
-      }
-      return item;
-    });
-
-    setTodos(mappedItems);
-  };
+  useEffect(() => {
+    const uName = prompt("Please enter your username");
+    setUserName(uName);
+  }, []);
 
   return (
-    <div className="App">
-      <form onSubmit={handleSubmit}>
-        <label>Todo</label> <br />
-        <input
-          placeholder="enter your todo"
-          value={todoText}
-          onChange={handleChange}
-        />
-        <br />
-        <input type="submit" value="Add" />
-      </form>
-      <ul>
-        {todos.map((todoItem) => {
-          return (
-            <li
-              key={todoItem.id}
-              // style={{
-              //   textDecorationStyle: "solid",
-              //   textDecorationLine: todoItem.isDone ? "line-through" : "none",
-              // }}
-              className={todoItem.isDone ? "isDone" : ""}
-            >
-              #{todoItem.id} - {todoItem.text}
-              <button
-                onClick={() => {
-                  handleDelete(todoItem.id);
-                }}
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => {
-                  handleMoveTo(todoItem.id);
-                }}
-              >
-                {todoItem.isDone ? "Move To Undone" : "Move To Done"}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+    <>
+      <nav className="nav">
+        <Link to="/">Home</Link> | {""}
+        <Link to="about">About</Link> | {""}
+        <Link to="contact">Contact</Link> | {""}
+        <Link to="todos">Todos</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About userName={userName} />} />
+        <Route path="contact" element={<Contact userName={userName} />} />
+        <Route path="todos" element={<Todo userName={userName} />} />
+      </Routes>
+
+      <footer className="footer">Hello from footer</footer>
+    </>
   );
 };
+
+/*
+  39 -> 3 - 9
+  27 -> 2 - 7
+  14 -> 1 - 4
+  4
+*/
+
+// function mult(val) {}
+
+// mult(39) === 4 // true
