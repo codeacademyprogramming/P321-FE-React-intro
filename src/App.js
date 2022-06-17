@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 
 import "./App.css";
+import { Button } from "./components/Button";
+import { CustomButton } from "./components/CustomButton";
 import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
 import { Home } from "./pages/Home";
 import { Todo } from "./Todo";
-// import { Todo } from "./Todo";
 
 export const App = () => {
   // const [isVisible, setIsVisible] = useState(false);
@@ -26,8 +27,11 @@ export const App = () => {
         <Link to="todos">Todos</Link>
       </nav>
 
+      <Button value="Button" />
+      <CustomButton value="CustomButton" />
+
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home userName={userName} />} />
         <Route path="about" element={<About userName={userName} />} />
         <Route path="contact" element={<Contact userName={userName} />} />
         <Route path="todos" element={<Todo userName={userName} />} />
@@ -48,3 +52,6 @@ export const App = () => {
 // function mult(val) {}
 
 // mult(39) === 4 // true
+
+// TODO - props not sent handling
+// TODO - how to handle crashes

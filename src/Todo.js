@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export const Todo = () => {
   const [todos, setTodos] = useState([]);
-  const [todoText, setTodoText] = useState();
+  const [todoText, setTodoText] = useState("");
   const [currentTodo, setCurrentTodo] = useState();
+  const inputRef = useRef();
 
   useEffect(() => {
+    inputRef.current.focus();
+
     return function () {
       console.log("component was removed");
     };
@@ -73,6 +76,14 @@ export const Todo = () => {
     setTodoText(todoItem.text);
   };
 
+  const lengthOfCurrentTodo = useMemo(() => {
+    console.log("rerendered from memo");
+    return todoText.length * 5;
+  }, [todoText]);
+  console.log("rerendered");
+
+  useEffect(() => {}, []);
+
   return (
     <div className="App">
       <form onSubmit={handleSubmit}>
@@ -81,8 +92,11 @@ export const Todo = () => {
           placeholder="enter your todo"
           value={todoText}
           onChange={handleChange}
+          id="input"
+          ref={inputRef}
         />
         <br />
+        {lengthOfCurrentTodo}
         <input type="submit" value={currentTodo ? "Save" : "Add"} />
       </form>
       {currentTodo && (
