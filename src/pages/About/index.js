@@ -1,8 +1,12 @@
-export const About = ({ userName }) => {
+import { useUserContext } from "../../context/User";
+
+export const About = () => {
+  const { user } = useUserContext();
+
   return (
     <>
       <h1>About page</h1>
-      <p>{userName}</p>
+      <p>Hello {user.firstName}</p>
     </>
   );
 };

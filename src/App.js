@@ -1,43 +1,28 @@
-import { useEffect, useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
-
 import "./App.css";
-import { Button } from "./components/Button";
-import { CustomButton } from "./components/CustomButton";
+
+import { Routes, Route } from "react-router-dom";
+import { Footer } from "./components/Footer";
+import { Navigation } from "./components/Navigation";
 import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
 import { Home } from "./pages/Home";
+import { Users } from "./pages/User";
 import { Todo } from "./Todo";
 
 export const App = () => {
-  // const [isVisible, setIsVisible] = useState(false);
-  const [userName, setUserName] = useState("");
-
-  useEffect(() => {
-    const uName = prompt("Please enter your username");
-    setUserName(uName);
-  }, []);
-
   return (
     <>
-      <nav className="nav">
-        <Link to="/">Home</Link> | {""}
-        <Link to="about">About</Link> | {""}
-        <Link to="contact">Contact</Link> | {""}
-        <Link to="todos">Todos</Link>
-      </nav>
-
-      <Button value="Button" />
-      <CustomButton value="CustomButton" />
+      <Navigation />
 
       <Routes>
-        <Route path="/" element={<Home userName={userName} />} />
-        <Route path="about" element={<About userName={userName} />} />
-        <Route path="contact" element={<Contact userName={userName} />} />
-        <Route path="todos" element={<Todo userName={userName} />} />
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="todos" element={<Todo />} />
+        <Route path="users" element={<Users />} />
       </Routes>
 
-      <footer className="footer">Hello from footer</footer>
+      <Footer />
     </>
   );
 };

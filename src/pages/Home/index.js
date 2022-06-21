@@ -1,7 +1,7 @@
-export const Home = ({ userName }) => {
+export const Home = () => {
   return (
     <div>
-      <h1>Welcome to Home Page, dear {userName}</h1>
+      <h1>Welcome to Home Page, dear</h1>
     </div>
   );
 };

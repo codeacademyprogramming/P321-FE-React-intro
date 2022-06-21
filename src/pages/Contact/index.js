@@ -1,3 +1,3 @@
-export function Contact(props) {
-  return `Hello, ${props.userName}, welcome toContact page`;
+export function Contact() {
+  return `Hello, welcome toContact page`;
 }
