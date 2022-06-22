@@ -1,49 +1,69 @@
-import { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import axios from "axios";
+
+import { Link } from "react-router-dom";
+import { BASE_URL, QUERY_KEYS } from "../../consts";
 import { UserRow } from "./components/UserRow";
 
+import { useQuery, useQueryClient } from "react-query";
+
 export const Users = () => {
-  const [users, setUsers] = useState([]);
+  const { isLoading, error, data } = useQuery(QUERY_KEYS.users, () => {
+    return axios(`${BASE_URL}/users`);
+  });
 
-  useEffect(() => {
-    fetch("http://localhost:3333/users")
-      .then((res) => {
-        return res.json();
-      })
-      .then((jsonRes) => {
-        setUsers(jsonRes);
-      });
-  }, []);
+  const queryClient = useQueryClient();
 
-  const onDelete = (userId) => {
-    const updatedUsers = users.filter((user) => user.userId !== userId);
-    setUsers(updatedUsers);
+  if (isLoading) {
+    return "loading";
+  }
+
+  if (error) {
+    return "something went wrong";
+  }
+
+  const onDelete = () => {
+    queryClient.resetQueries(QUERY_KEYS.users);
   };
 
   return (
     <section>
-      <h1>Users page</h1>
+      <Box component="h1" display="flex" justifyContent="space-between">
+        Users page
+        <Button color="primary" variant="contained">
+          <Link to="/users/create">Create new user</Link>
+        </Button>
+      </Box>
 
-      <table>
-        <thead>
-          <tr>
-            <th>avatar</th>
-            <th>userId</th>
-            <th>username</th>
-            <th>email</th>
-            <th>password</th>
-            <th>birthdate</th>
-            <th>registeredAt</th>
-            <th>actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => {
-            return (
-              <UserRow key={user.userId} user={user} onDelete={onDelete} />
-            );
-          })}
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>UserId</TableCell>
+              <TableCell>Avatar</TableCell>
+              <TableCell align="right">Username</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.data.map((user) => {
+              return (
+                <UserRow key={user.userId} user={user} onDelete={onDelete} />
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </section>
   );
 };
