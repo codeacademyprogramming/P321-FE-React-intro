@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../consts";
 import { useNavigate } from "react-router-dom";
@@ -19,13 +19,13 @@ const schema = yup
       .string()
       .email("Email is not valid")
       .required("This field is required"),
-    avatar: yup.string().required("This field is required"),
     password: yup.string().required("This field is required"),
     birthdate: yup.string().required("This field is required"),
   })
   .required();
 
 export const UserCreate = () => {
+  const [file, setFile] = useState();
   const {
     control,
     handleSubmit,
@@ -34,25 +34,35 @@ export const UserCreate = () => {
     defaultValues: {
       username: "",
       email: "",
-      avatar: "",
       password: "",
       birthdate: "",
     },
     reValidateMode: "",
-
     resolver: yupResolver(schema),
   });
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    axios.post(`${BASE_URL}/users`, { user: data }).then((res) => {
-      if (res.status === 204) {
-        navigate("/users");
-      }
-    });
+    const formData = new FormData();
+    formData.append("username", data.username);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("birthdate", data.birthdate);
+    formData.append("avatar", file);
+
+    axios
+      .post(`${BASE_URL}/users`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        if (res.status === 204) {
+          navigate("/users");
+        }
+      });
   };
 
-  console.log(errors);
   return (
     <Box width="50%" mx="auto">
       <h1>Create new user</h1>
@@ -108,7 +118,7 @@ export const UserCreate = () => {
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
-          <Controller
+          {/* <Controller
             name="avatar"
             control={control}
             render={({ field }) => (
@@ -122,7 +132,8 @@ export const UserCreate = () => {
                 }
               />
             )}
-          />
+          /> */}
+          <input type="file" onChange={(e) => setFile(e.target.files[0])} />
         </FormControl>
         <FormControl fullWidth margin="normal">
           <Controller

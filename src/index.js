@@ -5,7 +5,7 @@ import "./index.css";
 import { App } from "./App";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { UserContextProvider } from "./context/User";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
 
